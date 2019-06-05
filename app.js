@@ -4,11 +4,14 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode")
 const INITIAL_COLOR = "#2C2C2C";
-
+const saveBtn = document.getElementById("jsSave");
 
 canvas.width = 700;
 canvas.height = 700;
 
+
+ctx.fillStyle ="white";
+ctx.fillRect(0, 0, 700, 700)
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillstyle = INITIAL_COLOR;
 
@@ -73,6 +76,10 @@ function handleRangeChange(event) {
     ctx.lineWidth = value;
 }
 
+function handleCM(event) {
+    event.preventDefault();
+}
+
 Array.from(colors).forEach(color =>
     color.addEventListener("click", handleColorClick)
 );
@@ -84,12 +91,22 @@ function handleCanvasClick() {
 
 }
 
+function handleSaveClick() {
+    const image = canvas.toDataURL();
+    // jpeg로 만들고 싶으면 todataurl 인자로 "image/jpeg" 넣어주면 댐.
+    const link = document.createElement("a");
+    link.download = "PaintJS[good]"; // 얘는 이름임.
+    link.href = image;
+    link.click();
+}
+
 if(canvas) {
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("mousedown", startPainting);
     canvas.addEventListener("mouseup", stopPainting);
     canvas.addEventListener("mouseleave", stopPainting);
-    canvas.addEventListener("click", handleCanvasClick)
+    canvas.addEventListener("click", handleCanvasClick);
+    canvas.addEventListener("contextmenu", handleCM)
 }
 
 if(range) {
@@ -98,4 +115,8 @@ if(range) {
 
 if(mode) {
     mode.addEventListener("click", handleModeClick)
+}
+
+if(saveBtn) {
+    saveBtn.addEventListener("click", handleSaveClick)
 }
